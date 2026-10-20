@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đề 1 - Bài Làm Lý Thuyết</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background: #f4f4f9; color: #333; }
+        header { background: #0056b3; color: white; padding: 15px 20px; text-align: center; border-radius: 5px; }
+        nav { background: #333; padding: 10px; margin-top: 10px; border-radius: 5px; }
+        nav a { color: white; text-decoration: none; padding: 8px 15px; display: inline-block; }
+        nav a:hover { background: #555; border-radius: 3px; }
+        .container { background: white; padding: 25px; margin-top: 15px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h2 { color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 5px; }
+        code { background: #eef; padding: 2px 6px; border-radius: 4px; color: #c7254e; }
+        pre { background: #282c34; color: #abb2bf; padding: 15px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Bài Làm Phần Lý Thuyết - Đề 1</h1>
+</header>
+
+<nav>
+    <a href="index.html">Trang chủ (Bài thi Đề 1)</a>
+    <a href="lythuyet.html">Trả lời Lý thuyết</a>
+    <a href="baitap22.html">Bài tập 22</a>
+    <a href="baitap23.html">Bài tập 23</a>
+    <a href="diemdanh.html">Thông tin Điểm danh</a>
+</nav>
+
+<div class="container">
+    <h2>Câu 1: Khác biệt giữa position: relative và position: absolute (10 điểm)</h2>
+    <p><strong>Khác biệt chính:</strong></p>
+    <ul>
+        <li><code>position: relative</code>: Phần tử vẫn nằm trong luồng dịch chuyển tự nhiên (normal document flow) của trang. Các thuộc tính <code>top, right, bottom, left</code> sẽ dịch chuyển phần tử dựa trên <strong>vị trí ban đầu</strong> của chính nó mà không làm xô lệch các phần tử xung quanh.</li>
+        <li><code>position: absolute</code>: Phần tử bị kéo ra khỏi luồng dịch chuyển tự nhiên (out of flow). Nó sẽ định vị tương đối dựa theo <strong>phần tử cha gần nhất có <code>position</code> khác <code>static</code></strong>. Nếu không có, nó sẽ căn theo thẻ <code>&lt;body&gt;</code> hoặc khung nhìn.</li>
+    </ul>
+    <p><strong>Ví dụ tình huống Responsive Layout:</strong></p>
+    <pre><code>/* Card sản phẩm có badge "Giảm giá" ở góc */
+.product-card {
+    position: relative; /* Thẻ cha làm mốc định vị */
+    width: 100%;
+    max-width: 300px;
+}
+.badge-sale {
+    position: absolute; /* Thẻ con định vị tuyệt đối theo .product-card */
+    top: 10px;
+    right: 10px;
+}</code></pre>
+    <p><strong>Ảnh hưởng khi Deploy & Responsive:</strong> Cần cẩn trọng khi dùng <code>absolute</code> với kích thước cố định (px) vì khi mở trên thiết bị màn hình nhỏ (mobile), phần tử có thể đè lên chữ hoặc tràn khung (overflow). Nên kết hợp Flexbox/Grid cho khung tổng thể và chỉ dùng <code>absolute</code> cho các chi tiết nhỏ gắn liền với thẻ cha (như badge, icon, button đóng modal).</p>
+
+    <h2>Câu 2: Quy trình Đăng ký Domain, Hosting & Security (10 điểm)</h2>
+    <p><strong>Quy trình đăng ký và cấu hình:</strong></p>
+    <ol>
+        <li><strong>Chọn & Mua Domain:</strong> Đăng ký tên miền qua nhà cung cấp (Namecheap, GoDaddy, Pawnhost, v.v.).</li>
+        <li><strong>Thuê/Tạo Hosting:</strong> Sử dụng Hosting dịch vụ hoặc các nền tảng Static Hosting (GitHub Pages, Netlify, Vercel).</li>
+        <li><strong>Cấu hình DNS:</strong> Trỏ bản ghi (A Record chỉ về IP của Hosting, hoặc CNAME Record trỏ về tên miền của dịch vụ hosting).</li>
+    </ol>
+    <p><strong>Vai trò của DNS (Domain Name System):</strong> Đóng vai trò như "danh bạ Internet", dịch chuyển Tên miền dạng chữ mà con người dễ nhớ (ví dụ: <code>example.com</code>) thành địa chỉ IP dạng số mà máy tính sử dụng để kết nối (ví dụ: <code>192.0.2.1</code>).</p>
+    <p><strong>2 Công cụ Deploy không cần Server riêng:</strong></p>
+    <ul>
+        <li><strong>GitHub Pages:</strong> Tích hợp sẵn với kho lưu trữ GitHub, hoàn toàn miễn phí cho trang web tĩnh HTML/CSS/JS.</li>
+        <li><strong>Netlify:</strong> Hỗ trợ CI/CD kéo thả trực tiếp file hoặc kết nối Git, hỗ trợ SSL miễn phí tự động.</li>
+    </ul>
+    <p><strong>Rủi ro bảo mật nếu cấu hình sai:</strong></p>
+    <ul>
+        <li>Chưa kích hoạt HTTPS (thiếu chứng chỉ SSL/TLS): Dữ liệu truyền đi không được mã hóa, dễ bị tấn công Man-in-the-Middle (MITM).</li>
+        <li>Sai cấu hình CORS hoặc lộ API Key nhạy cảm trong code client JS công khai.</li>
+    </ul>
+
+    <h2>Câu 3: So sánh let, const, var; Hoisting và Debug (10 điểm)</h2>
+    <table border="1" cellpadding="8" style="border-collapse: collapse; width: 100%;">
+        <tr style="background:#f2f2f2;">
+            <th>Đặc điểm</th>
+            <th>var</th>
+            <th>let</th>
+            <th>const</th>
+        </tr>
+        <tr>
+            <td><strong>Scope</strong></td>
+            <td>Function Scope</td>
+            <td>Block Scope <code>{}</code></td>
+            <td>Block Scope <code>{}</code></td>
+        </tr>
+        <tr>
+            <td><strong>Khai báo lại</strong></td>
+            <td>Có</td>
+            <td>Không</td>
+            <td>Không</td>
+        </tr>
+        <tr>
+            <td><strong>Gán lại giá trị</strong></td>
+            <td>Có</td>
+            <td>Có</td>
+            <td>Không (Hằng số)</td>
+        </tr>
+        <tr>
+            <td><strong>Hoisting</strong></td>
+            <td>Có (Khởi tạo là <code>undefined</code>)</td>
+            <td>Có (Nằm trong Temporal Dead Zone - TDZ)</td>
+            <td>Có (Nằm trong Temporal Dead Zone - TDZ)</td>
+        </tr>
+    </table>
+
+    <p><strong>Ví dụ lỗi thường gặp do Hoisting / TDZ:</strong></p>
+    <pre><code>// Sử dụng let trước khi khai báo
+console.log(age); // Lỗi: Uncaught ReferenceError: Cannot access 'age' before initialization
+let age = 20;
+
+// Lỗi biến var trong vòng lặp bất đồng bộ
+for (var i = 0; i < 3; i++) {
+    setTimeout(() => console.log(i), 1000); // In ra: 3, 3, 3 (do biến i dùng chung function scope)
+}</code></pre>
+    <p><strong>Cách Debug bằng Chrome DevTools:</strong></p>
+    <ol>
+        <li>Mở DevTools (Phím F12 hoặc Ctrl+Shift+I) -> Chuyển sang tab <strong>Sources</strong>.</li>
+        <li>Mở file JS, nhấn vào số dòng code để đặt <strong>Breakpoint</strong> (Điểm dừng).</li>
+        <li>Thực thi thao tác trên trang web, code sẽ dừng tại Breakpoint. Sử dụng bảng <strong>Scope</strong> bên phải để quan sát giá trị biến và kiểm tra luồng chạy từng bước bằng nút <em>Step over / Step into</em>.</li>
+    </ol>
+
+    <h2>Câu 4: Event Delegation trong JavaScript (10 điểm)</h2>
+    <p><strong>Khái niệm:</strong> Event Delegation (Ủy quyền sự kiện) là kỹ thuật tận dụng cơ chế **Event Bubbling** (Sự kiện nổi bọt từ phần tử con lên phần tử cha) bằng cách gắn 1 sự kiện duy nhất lên thẻ cha để quản lý tất cả các phần tử con (kể cả các phần tử được thêm động vào DOM sau này).</p>
+    <p><strong>Ví dụ ứng dụng cho Dynamic List:</strong></p>
+    <pre><code>// Thẻ cha &lt;ul id="myList"&gt;&lt;/ul&gt;
+document.getElementById('myList').addEventListener('click', function(e) {
+    if (e.target && e.target.nodeName === 'LI') {
+        console.log('Bạn đã click vào item:', e.target.innerText);
+    }
+});</code></pre>
+    <p><strong>Lợi ích tối ưu hiệu suất:</strong> Giảm thiểu bộ nhớ (Memory Consumption) và cải thiện tốc độ xử lý do không phải đăng ký quá nhiều Event Listener cho từng phần tử con. Giúp code gọn gàng, tránh memory leak khi thêm/xóa thẻ động.</p>
+</div>
+
+</body>
+</html>

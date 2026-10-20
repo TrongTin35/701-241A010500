@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đề 1 - Bài Tập Thực Hành Lập Trình Web</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background-color: #f0f2f5; padding: 20px; line-height: 1.6; }
+        
+        /* Menu điều hướng theo yêu cầu */
+        nav { background: #1a252f; padding: 12px; border-radius: 6px; margin-bottom: 20px; }
+        nav a { color: #fff; text-decoration: none; padding: 8px 12px; margin-right: 5px; display: inline-block; font-weight: bold; }
+        nav a:hover { background: #34495e; border-radius: 4px; }
+
+        .section-box { background: #fff; padding: 20px; margin-bottom: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h2 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 8px; margin-bottom: 15px; }
+
+        /* CSS Bài 1: Danh sách sản phẩm */
+        .search-box { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .product-card { border: 1px solid #ddd; padding: 15px; border-radius: 6px; text-align: center; background: #fafafa; }
+        .product-card h4 { color: #2e7d32; margin-bottom: 5px; }
+        .error-msg { color: #d32f2f; font-weight: bold; display: none; margin-top: 10px; }
+
+        /* CSS Bài 2: Form đăng ký */
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input[type="text"], .form-group input[type="email"], .form-group input[type="password"] {
+            width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;
+        }
+        .btn-submit { background: #27ae60; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; }
+        .btn-submit:hover { background: #219150; }
+        .form-err { color: #red; font-size: 0.85em; display: block; color: #e74c3c; margin-top: 3px; }
+        .success-msg { color: #27ae60; font-weight: bold; margin-top: 10px; }
+
+        /* CSS Bài 3: Countdown Timer */
+        #timer-display { font-size: 2.5rem; font-weight: bold; text-align: center; margin: 15px 0; color: #2c3e50; }
+        .warning-animation { color: #e74c3c !important; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0.3; } }
+
+        /* Modal Alert */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 25px; border-radius: 8px; text-align: center; max-width: 400px; width: 90%; }
+        .modal-btn { margin-top: 15px; padding: 8px 16px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <!-- Menu điều hướng đáp ứng các mục a, b, c, d của đề bài -->
+    <nav>
+        <a href="index.html">Trang chủ (Đề 1)</a>
+        <a href="lythuyet.html">a) Trả lời Lý thuyết</a>
+        <a href="baitap23.html">b) Kết quả Bài 23</a>
+        <a href="baitap22.html">c) Kết quả Bài 22</a>
+        <a href="diemdanh.html">d) Thông tin Điểm danh</a>
+    </nav>
+
+    <!-- BÀI 1: DANH SÁCH SẢN PHẨM -->
+    <div class="section-box">
+        <h2>Bài 1: Danh sách sản phẩm & Tìm kiếm</h2>
+        <input type="text" id="searchInput" class="search-box" placeholder="Nhập tên sản phẩm để tìm kiếm...">
+        <div id="productGrid" class="product-grid"></div>
+        <p id="noResult" class="error-msg">Không tìm thấy sản phẩm phù hợp!</p>
+        
+        <details style="margin-top: 15px; background: #eef; padding: 10px; border-radius: 4px;">
+            <summary><strong>Giải thích logic tư duy (Bài 1):</strong></summary>
+            <p>- <strong>Xử lý Input phòng chống Injection:</strong> Sử dụng <code>textContent</code> thay vì gán trực tiếp chuỗi vào <code>innerHTML</code> giúp mã hóa tự động các ký tự đặc biệt, chống lỗi XSS.</p>
+            <p>- <strong>Tối ưu tìm kiếm:</strong> Chuyển cả từ khóa và tên sản phẩm về chữ thường (<code>toLowerCase()</code>) và loại bỏ khoảng trắng dư thừa (<code>trim()</code>) để so sánh không phân biệt hoa thường.</p>
+        </details>
+    </div>
+
+    <!-- BÀI 2: FORM ĐĂNG KÝ -->
+    <div class="section-box">
+        <h2>Bài 2: Form đăng ký người dùng</h2>
+        <form id="registerForm" novalidate>
+            <div class="form-group">
+                <label for="username">Họ và tên:</label>
+                <input type="text" id="username" required>
+                <span class="form-err" id="errName"></span>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+                <span class="form-err" id="errEmail"></span>
+            </div>
+            <div class="form-group">
+                <label for="password">Mật khẩu:</label>
+                <input type="password" id="password" required>
+                <span class="form-err" id="errPass"></span>
+            </div>
+            <div class="form-group">
+                <label><input type="checkbox" id="terms"> Đồng ý với điều khoản sử dụng</label>
+                <span class="form-err" id="errTerms"></span>
+            </div>
+            <button type="submit" class="btn-submit">Đăng ký</button>
+        </form>
+        <p id="successMsg" class="success-msg"></p>
+
+        <details style="margin-top: 15px; background: #eef; padding: 10px; border-radius: 4px;">
+            <summary><strong>Giải thích logic tư duy (Bài 2):</strong></summary>
+            <p>- <strong>Xử lý Submit & Validate:</strong> Dùng <code>e.preventDefault()</code> để ngăn trình duyệt reload trang. Kiểm tra định dạng Email bằng Regular Expression và Mật khẩu bằng Regex có đủ ít nhất 8 ký tự, gồm chữ hoa, chữ thường và số.</p>
+            <p>- <strong>Bảo mật LocalStorage:</strong> LocalStorage chỉ lưu thông tin trên Client dưới dạng Plaintext, do đó không bao giờ lưu mật khẩu dạng chưa mã hóa thực tế. Trong ví dụ này chỉ lưu trạng thái để minh họa theo yêu cầu đề bài.</p>
+        </details>
+    </div>
+
+    <!-- BÀI 3: ĐỒNG HỒ ĐẾM NGƯỢC -->
+    <div class="section-box">
+        <h2>Bài 3: Đồng hồ đếm ngược (10 Phút)</h2>
+        <div id="timer-display">10:00</div>
+        <button id="btnStart" class="btn-submit">Bắt đầu đếm ngược</button>
+
+        <details style="margin-top: 15px; background: #eef; padding: 10px; border-radius: 4px;">
+            <summary><strong>Giải thích logic tư duy (Bài 3):</strong></summary>
+            <p>- <strong>Tránh Memory Leak:</strong> Dùng <code>clearInterval(timerInterval)</code> ngay khi đồng hồ về 0 hoặc khi reset đếm ngược để giải phóng bộ nhớ RAM.</p>
+            <p>- <strong>Đồng bộ thời gian khi Deploy:</strong> Để tránh lệch thời gian client do máy tính người dùng chạy sai, nên tính khoảng thời gian dựa trên <code>Timestamp</code> (thời gian đích gửi từ Server) trừ cho <code>Date.now()</code> của client thay vì giảm dần biến đếm từng giây.</p>
+        </details>
+    </div>
+
+    <!-- Modal Alert cho Bài 3 -->
+    <div id="timeModal" class="modal">
+        <div class="modal-content">
+            <h3>Hết giờ!</h3>
+            <p>Đã hết thời gian 10 phút đếm ngược.</p>
+            <button class="modal-btn" onclick="closeModal()">Đóng</button>
+        </div>
+    </div>
+
+    <script>
+        // ==================== BÀI 1: JS XỬ LÝ SẢN PHẨM ====================
+        const products = [
+            { id: 1, name: 'Laptop Dell XPS 13', price: '28.000.000 VNĐ' },
+            { id: 2, name: 'Điện thoại iPhone 15', price: '22.000.000 VNĐ' },
+            { id: 3, name: 'Tai nghe Bluetooth Sony', price: '3.500.000 VNĐ' },
+            { id: 4, name: 'Bàn phím cơ Logi', price: '1.800.000 VNĐ' },
+            { id: 5, name: 'Chuột không dây Logitech', price: '600.000 VNĐ' }
+        ];
+
+        const productGrid = document.getElementById('productGrid');
+        const searchInput = document.getElementById('searchInput');
+        const noResult = document.getElementById('noResult');
+
+        function renderProducts(list) {
+            productGrid.innerHTML = '';
+            if (list.length === 0) {
+                noResult.style.display = 'block';
+            } else {
+                noResult.style.display = 'none';
+                list.forEach(p => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    card.innerHTML = `<h4>${p.name}</h4><p>Giá: ${p.price}</p>`;
+                    productGrid.appendChild(card);
+                });
+            }
+        }
+
+        renderProducts(products);
+
+        searchInput.addEventListener('input', function(e) {
+            const keyword = e.target.value.toLowerCase().trim();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(keyword));
+            renderProducts(filtered);
+        });
+
+        // ==================== BÀI 2: JS VALIDATE FORM ====================
+        const regForm = document.getElementById('registerForm');
+        
+        regForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Clear cũ
+            document.getElementById('errName').innerText = '';
+            document.getElementById('errEmail').innerText = '';
+            document.getElementById('errPass').innerText = '';
+            document.getElementById('errTerms').innerText = '';
+            document.getElementById('successMsg').innerText = '';
+
+            const name = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const pass = document.getElementById('password').value;
+            const terms = document.getElementById('terms').checked;
+
+            let isValid = true;
+
+            if (!name) {
+                document.getElementById('errName').innerText = 'Vui lòng nhập họ tên!';
+                isValid = false;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('errEmail').innerText = 'Email không hợp lệ!';
+                isValid = false;
+            }
+
+            // Regex: Ít nhất 8 ký tự, 1 chữ hoa, 1 chữ thường, 1 số
+            const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+            if (!passRegex.test(pass)) {
+                document.getElementById('errPass').innerText = 'Mật khẩu phải từ 8 ký tự, bao gồm chữ hoa, chữ thường và số!';
+                isValid = false;
+            }
+
+            if (!terms) {
+                document.getElementById('errTerms').innerText = 'Bạn phải đồng ý với điều khoản!';
+                isValid = false;
+            }
+
+            if (isValid) {
+                // Lưu thông tin vào LocalStorage
+                const userData = { name: name, email: email, registeredAt: new Date().toLocaleString() };
+                localStorage.setItem('registeredUser', JSON.stringify(userData));
+                
+                document.getElementById('successMsg').innerText = 'Đăng ký thành công! Đã lưu vào LocalStorage.';
+                regForm.reset();
+            }
+        });
+
+        // ==================== BÀI 3: COUNTDOWN TIMER ====================
+        let totalSeconds = 10 * 60; // 10 phút
+        let timerInterval = null;
+        const timerDisplay = document.getElementById('timer-display');
+
+        document.getElementById('btnStart').addEventListener('click', function() {
+            if (timerInterval) clearInterval(timerInterval); // Tránh trùng lặp interval
+
+            totalSeconds = 10 * 60;
+            updateDisplay();
+
+            timerInterval = setInterval(() => {
+                totalSeconds--;
+                updateDisplay();
+
+                if (totalSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('timeModal').style.display = 'flex';
+                }
+            }, 1000);
+        });
+
+        function updateDisplay() {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            
+            const mm = minutes < 10 ? '0' + minutes : minutes;
+            const ss = seconds < 10 ? '0' + seconds : seconds;
+            
+            timerDisplay.innerText = `${mm}:${ss}`;
+
+            // Thêm animation nhấp nháy đỏ khi dưới 1 phút (60s)
+            if (totalSeconds < 60 && totalSeconds > 0) {
+                timerDisplay.classList.add('warning-animation');
+            } else {
+                timerDisplay.classList.remove('warning-animation');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('timeModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
